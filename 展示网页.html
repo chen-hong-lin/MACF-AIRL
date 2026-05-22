@@ -136,6 +136,22 @@
     .nav.scrolled .nav-links a.active {
       background: rgba(0, 107, 112, .1);
     }
+    .lang-toggle {
+      min-width: 64px;
+      min-height: 36px;
+      border: 1px solid rgba(255, 255, 255, .34);
+      border-radius: 7px;
+      background: rgba(255, 255, 255, .12);
+      color: currentColor;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .nav.scrolled .lang-toggle {
+      border-color: rgba(0, 107, 112, .22);
+      background: rgba(0, 107, 112, .08);
+    }
 
     .hero {
       min-height: 92vh;
@@ -1373,6 +1389,7 @@
           <a href="#results">结果</a>
           <a href="#visuals">图像</a>
           <a href="#videos">视频</a>
+          <button class="lang-toggle" type="button" aria-label="Switch language">EN</button>
         </div>
       </div>
     </nav>
@@ -1780,6 +1797,191 @@
     const sections = [...document.querySelectorAll("main section[id]")];
     const links = [...document.querySelectorAll(".nav-links a")];
     const revealItems = [...document.querySelectorAll(".reveal")];
+    const langToggle = document.querySelector(".lang-toggle");
+
+    const translations = {
+      "跳到正文": "Skip to content",
+      "回到顶部": "Back to top",
+      "摘要": "Abstract",
+      "框架": "Framework",
+      "实验": "Experiment",
+      "结果": "Results",
+      "图像": "Figures",
+      "视频": "Videos",
+      "自动驾驶仿真测试": "Autonomous Driving Simulation Testing",
+      "面向自动驾驶仿真测试的对抗式偏好引导多源注意力条件流匹配轨迹生成方法": "Adversarial Preference-Guided Multi-Source Attention Conditional Flow Matching for Trajectory Generation in Autonomous Driving Simulation Testing",
+      "以条件流匹配作为生成主干，将多源注意力、道路与车辆约束、AIRL 奖励引导合成一个闭环轨迹生成机制，用真实驾驶数据中的隐含偏好提升仿真交通流的真实性、安全性与可控性。": "The framework uses conditional flow matching as the generative backbone, integrates multi-source attention, road and vehicle constraints, and AIRL reward guidance into a closed-loop trajectory generation mechanism, and improves the realism, safety, and controllability of simulated traffic flows by learning implicit preferences from real driving data.",
+      "查看核心结果": "View Key Results",
+      "150 个 nuScenes Singapore + Boston 场景": "150 nuScenes Singapore + Boston Scenes",
+      "离路车辆占比均值": "Mean Off-Road Vehicle Ratio",
+      "低于 BC 与 STRIVE": "Lower than BC and STRIVE",
+      "碰撞车辆占比均值": "Mean Collision Vehicle Ratio",
+      "四类方法最优": "Best among four methods",
+      "碰撞事件密度": "Collision Event Density",
+      "次 / 千车辆帧": "events / 1k vehicle frames",
+      "Singapore 速度均值差": "Singapore Mean Speed Gap",
+      "m/s · 真实 3.14 / Ours 3.10": "m/s · Real 3.14 / Ours 3.10",
+      "Boston 速度均值差": "Boston Mean Speed Gap",
+      "m/s · 真实 1.67 / Ours 1.66": "m/s · Real 1.67 / Ours 1.66",
+      "速度分布一致性": "Speed Distribution Consistency",
+      "Singapore + Boston 均贴近真实轨迹": "Both cities stay close to real trajectories",
+      "研究摘要": "Research Abstract",
+      "从轨迹分布拟合，推进到驾驶偏好引导": "From Trajectory Distribution Fitting to Driving Preference Guidance",
+      "本文面向自动驾驶仿真测试对交通参与者轨迹真实性、道路约束符合性与交互安全性的需求，提出一种融合多源注意力条件流匹配与对抗式逆强化学习的车辆轨迹生成方法。": "To meet the requirements of autonomous driving simulation testing for realistic participant trajectories, road-constraint compliance, and interaction safety, this paper proposes a vehicle trajectory generation method that integrates multi-source attention conditional flow matching with adversarial inverse reinforcement learning.",
+      "方法以条件流匹配模型作为生成主干，在动作空间中学习专家轨迹的条件分布，并结合车辆运动学模型将生成动作序列积分为未来轨迹；同时融合目标车辆历史状态、局部道路语义信息和周围车辆交互信息，增强复杂多车交互场景下的条件表达能力。": "The method uses conditional flow matching as the generative backbone, learns the conditional distribution of expert trajectories in the action space, and integrates generated action sequences into future trajectories with a vehicle kinematic model. It also fuses target-vehicle history, local road semantics, and surrounding-vehicle interactions to strengthen scene conditioning in complex multi-agent scenarios.",
+      "为刻画真实驾驶行为中的隐含决策偏好，进一步引入 AIRL 判别器，通过专家轨迹与生成轨迹的对抗学习恢复潜在奖励信号，并在采样阶段将奖励转化为梯度引导，使生成轨迹向更符合专家驾驶行为的方向演化。": "To capture implicit decision preferences in real driving behavior, an AIRL discriminator is introduced to recover latent reward signals through adversarial learning between expert and generated trajectories. During sampling, the reward is converted into gradient guidance so that generated trajectories evolve toward expert-like driving behavior.",
+      "在生成过程中，模型不直接生成位置序列，而是生成纵向加速度和航向角速度等动作序列，再由车辆运动学方程还原为未来轨迹，从而增强结果的动力学可行性和可控性。": "During generation, the model does not directly synthesize position sequences. Instead, it generates action sequences such as longitudinal acceleration and yaw rate, then reconstructs future trajectories through vehicle kinematics to improve dynamic feasibility and controllability.",
+      "实验基于 nuScenes Singapore 与 Boston 场景展开，从安全性、运动学分布一致性、跨区域泛化和消融分析等角度验证方法有效性，为自动驾驶仿真测试中的交通流生成与场景扩展提供支撑。": "Experiments are conducted on nuScenes Singapore and Boston scenarios. The method is evaluated from the perspectives of safety, kinematic distribution consistency, cross-region generalization, and ablation analysis, supporting traffic-flow generation and scenario expansion for autonomous driving simulation testing.",
+      "车辆轨迹生成": "Vehicle Trajectory Generation",
+      "对抗式逆强化学习": "Adversarial Inverse Reinforcement Learning",
+      "条件流匹配模型": "Conditional Flow Matching",
+      "偏好闭环框架": "Preference Closed Loop",
+      "构建“条件编码、轨迹生成、奖励判别、采样引导”的闭环机制。": "Builds a closed loop of condition encoding, trajectory generation, reward discrimination, and sampling guidance.",
+      "多源注意力注入": "Multi-Source Attention Injection",
+      "融合历史状态、局部语义地图与周围车辆交互，增强条件表达。": "Fuses historical states, local semantic maps, and surrounding-vehicle interactions to enhance condition representation.",
+      "AIRL 奖励采样": "AIRL Reward-Guided Sampling",
+      "将潜在奖励信号转化为采样阶段梯度引导，不直接修改生成器参数。": "Converts latent reward signals into sampling-stage gradient guidance without directly modifying generator parameters.",
+      "跨城市实验验证": "Cross-City Validation",
+      "基于 nuScenes Singapore 与 Boston 场景评估安全性、真实性与泛化能力。": "Evaluates safety, realism, and generalization on nuScenes Singapore and Boston scenarios.",
+      "方法框架": "Method Framework",
+      "生成器负责分布，判别器负责偏好，引导项负责约束": "The Generator Models Distributions, the Discriminator Learns Preferences, and Guidance Enforces Constraints",
+      "图 1 · 多源注意力条件流匹配与 AIRL 引导的车辆轨迹生成总体框架": "Fig. 1 · Overall framework of vehicle trajectory generation with multi-source attention conditional flow matching and AIRL guidance",
+      "多源条件编码": "Multi-Source Condition Encoding",
+      "从目标车状态、局部语义地图和邻车交互中提取统一条件表征。": "Extracts unified condition representations from target-vehicle states, local semantic maps, and neighboring-vehicle interactions.",
+      "动作空间生成": "Action-Space Generation",
+      "条件流匹配学习从噪声动作到专家动作分布的连续速度场。": "Conditional flow matching learns a continuous velocity field from noisy actions to the expert-action distribution.",
+      "潜在奖励恢复": "Latent Reward Recovery",
+      "AIRL 判别器从专家轨迹与生成轨迹的对抗学习中恢复行为偏好。": "The AIRL discriminator recovers behavioral preferences through adversarial learning between expert and generated trajectories.",
+      "约束采样修正": "Constraint-Guided Sampling Correction",
+      "叠加奖励、地图可行驶区域和车辆碰撞约束，提升交互安全性。": "Combines reward, drivable-area, and collision constraints to improve interaction safety.",
+      "论文核心模块说明": "Core Paper Modules",
+      "多源条件编码模块": "Multi-Source Condition Encoding Module",
+      "将目标车辆历史状态、局部语义地图和周围车辆交互信息统一编码，为生成器提供场景条件。": "Encodes target-vehicle history, local semantic maps, and surrounding interactions into unified scene conditions for the generator.",
+      "历史轨迹": "History",
+      "地图 token": "Map Token",
+      "社会交互 token": "Social Interaction Token",
+      "条件流匹配生成器": "Conditional Flow Matching Generator",
+      "在动作空间学习从噪声动作到专家动作的连续速度场，再通过车辆运动学方程积分为未来轨迹。": "Learns a continuous velocity field from noisy actions to expert actions in the action space, then integrates actions into future trajectories using vehicle kinematics.",
+      "动作序列": "Action Sequence",
+      "时序 U-Net": "Temporal U-Net",
+      "动力学可行": "Dynamically Feasible",
+      "AIRL 判别奖励模块": "AIRL Discriminative Reward Module",
+      "通过专家轨迹与生成轨迹的对抗学习恢复隐含驾驶偏好，为采样阶段提供行为相似性引导。": "Recovers implicit driving preferences through adversarial learning and provides behavior-similarity guidance during sampling.",
+      "专家偏好": "Expert Preference",
+      "判别器奖励": "Discriminator Reward",
+      "行为一致性": "Behavior Consistency",
+      "约束采样引导模块": "Constraint Sampling Guidance Module",
+      "在采样阶段叠加 AIRL 奖励、地图可行驶区域和车辆碰撞约束，使轨迹远离离路与碰撞风险。": "Adds AIRL reward, drivable-area, and collision constraints during sampling to keep trajectories away from off-road and collision risks.",
+      "地图引导": "Map Guidance",
+      "智能体引导": "Agent Guidance",
+      "安全修正": "Safety Correction",
+      "实验验证设计": "Experimental Design",
+      "从跨城市数据、对比方法到评价指标，建立可复核的证据链": "A Reproducible Evidence Chain from Cross-City Data to Baselines and Metrics",
+      "AIRL 在 Singapore 学偏好，再到 Boston 检验泛化": "AIRL Learns Preferences in Singapore and Tests Generalization in Boston",
+      "论文将训练区域内表现和跨区域表现放在同一评价流程下比较。AIRL 判别器仅使用 Singapore 部分场景训练，结果阶段同时评估 Singapore 与 Boston，用来观察隐含驾驶偏好是否脱离单一城市道路结构。": "The paper compares in-domain and cross-region performance within the same evaluation pipeline. The AIRL discriminator is trained only with part of the Singapore scenes, while both Singapore and Boston are evaluated to examine whether the learned driving preference transfers beyond a single urban road structure.",
+      "Singapore 测试场景": "Singapore Test Scenes",
+      "Boston 测试场景": "Boston Test Scenes",
+      "逐场景统计总量": "Scene-Level Total",
+      "城市道路结构": "Urban Road Structures",
+      "对比方法覆盖“模仿、扩散、可控交通生成”三类基线": "Baselines Cover Imitation, Diffusion, and Controllable Traffic Generation",
+      "基于 SimNet 的反应式仿真基线，从真实观测中学习车辆响应行为。": "A SimNet-based reactive simulation baseline that learns vehicle response behavior from real-world observations.",
+      "面向事故倾向场景生成的交通先验方法，用于构造高风险交互轨迹。": "A learned traffic-prior method for generating accident-prone scenarios and high-risk interaction trajectories.",
+      "Guided Conditional Diffusion 方法，通过条件扩散实现可控交通仿真。": "A guided conditional diffusion method for controllable traffic simulation.",
+      "多源注意力条件流匹配结合 AIRL 奖励引导，兼顾偏好学习与采样约束。": "The proposed method combines multi-source attention conditional flow matching with AIRL reward guidance, balancing preference learning and sampling constraints.",
+      "指标体系同时覆盖安全性、真实性和泛化能力": "The Metric System Covers Safety, Realism, and Generalization",
+      "安全性与道路约束": "Safety and Road Constraints",
+      "衡量生成轨迹是否适合自动驾驶仿真测试，而不仅是轨迹形状相似。": "Measures whether generated trajectories are suitable for autonomous driving simulation testing, beyond shape similarity alone.",
+      "行为真实性": "Behavior Realism",
+      "比较生成轨迹与真实驾驶轨迹在运动学分布和空间误差上的一致性。": "Compares generated and real trajectories in terms of kinematic distributions and spatial errors.",
+      "跨区域泛化": "Cross-Region Generalization",
+      "用 Singapore 与 Boston 的共同评估验证奖励偏好是否具备跨城市迁移潜力。": "Uses joint evaluation on Singapore and Boston to verify whether reward preferences transfer across cities.",
+      "实验结果": "Experimental Results",
+      "安全性指标与行为分布一致性共同验证生成轨迹的仿真可信度": "Safety Metrics and Behavior-Distribution Consistency Jointly Validate Simulation Credibility",
+      "碰撞风险显著下降，同时保持较低离路水平": "Collision Risk Is Significantly Reduced While Off-Road Behavior Remains Low",
+      "本文方法在碰撞车辆占比与碰撞事件密度上取得最优结果；CTG 的离路车辆占比略低，但碰撞风险明显更高，说明本文方法更好地平衡了道路约束符合性与车辆交互安全性。": "The proposed method achieves the best results in collision vehicle ratio and collision event density. Although CTG has a slightly lower off-road ratio, its collision risk is much higher, showing that the proposed method better balances road-constraint compliance and multi-vehicle interaction safety.",
+      "看可视化结果": "View Visual Evidence",
+      "Ours 离路车辆占比均值": "Ours Mean Off-Road Ratio",
+      "低于 BC 13.26% 与 STRIVE 26.82%，接近 CTG 8.36%。": "Lower than BC 13.26% and STRIVE 26.82%, close to CTG 8.36%.",
+      "Ours 碰撞车辆占比均值": "Ours Mean Collision Vehicle Ratio",
+      "相较 CTG、BC、STRIVE 分别降低约 41.2%、69.2%、89.5%。": "Reduced by about 41.2%, 69.2%, and 89.5% compared with CTG, BC, and STRIVE.",
+      "Ours 碰撞事件密度均值": "Ours Mean Collision Event Density",
+      "明显低于 CTG 1.71、BC 5.53 和 STRIVE 15.83。": "Clearly lower than CTG 1.71, BC 5.53, and STRIVE 15.83.",
+      "图像证据": "Figure Evidence",
+      "实验图表集中展示安全性、真实性与泛化能力": "Experimental Figures Highlight Safety, Realism, and Generalization",
+      "安全指标对比": "Safety Metric Comparison",
+      "柱状图展示原始指标值，数值越低表示碰撞、离路或 RSS 违规越少。": "The bar chart reports raw metric values; lower values indicate fewer collisions, off-road cases, or RSS violations.",
+      "总体性能雷达": "Overall Performance Radar",
+      "雷达图展示归一化性能分数，越靠外表示对应指标表现越好。": "The radar chart shows normalized performance scores; farther outward means better performance.",
+      "运动学分布一致性与跨区域泛化": "Kinematic Distribution Consistency and Cross-Region Generalization",
+      "训练区域内，速度、加速度和加加速度分布更接近真实轨迹。": "Within the training region, velocity, acceleration, and jerk distributions are closer to real trajectories.",
+      "AIRL 判别器未使用 Boston 数据训练，仍保持较好的行为一致性。": "The AIRL discriminator is not trained on Boston data, yet still maintains good behavior consistency.",
+      "视频证据": "Video Evidence",
+      "基于场景级评价筛选典型样本，直观呈现不同方法的轨迹差异": "Typical Samples Selected by Scene-Level Evaluation Reveal Method Differences",
+      "该场景包含 13 个交通参与者。Ours 在离路、碰撞车辆占比和碰撞事件密度上均为 0；CTG 与 BC 的碰撞车辆占比均为 15.38%，STRIVE 为 30.77%，适合展示复杂交互下的安全优势。": "This scene contains 13 traffic participants. Ours has zero off-road behavior, zero collision vehicle ratio, and zero collision event density. CTG and BC both have a collision vehicle ratio of 15.38%, while STRIVE reaches 30.77%, making this scene suitable for showing safety advantages under complex interactions.",
+      "该场景包含 35 个交通参与者。Ours 保持离路与碰撞指标为 0；CTG 的碰撞车辆占比为 11.43%，STRIVE 为 48.57%。BC 在该场景无碰撞但存在 17.14% 离路车辆占比，可作为基础行为克隆的参考对照。": "This scene contains 35 traffic participants. Ours keeps both off-road and collision metrics at zero. CTG has an 11.43% collision vehicle ratio and STRIVE reaches 48.57%. BC has no collision in this scene but shows a 17.14% off-road ratio, serving as a behavior-cloning reference.",
+      "论文结论": "Conclusion",
+      "真实驾驶行为分布刻画生成轨迹在仿真测试中的可用性基础": "Real Driving Behavior Distributions Establish the Usability Basis for Generated Trajectories in Simulation Testing",
+      "消融实验": "Ablation Study",
+      "按论文设计分三组验证：条件表达、采样约束与行为偏好": "Three Ablation Groups Validate Condition Expression, Sampling Constraints, and Behavioral Preference",
+      "论文中的消融不是直接比较所有配置的原始数值，而是分别设置组内基线：注意力消融以“开启两类注意力、关闭引导”为基线；引导消融以“开启注意力和完整引导”为基线；AIRL 判别器消融比较有无判别器奖励引导。下方数值均表示相对组内基线的退化百分比。": "The ablation study does not directly compare all raw configurations. Instead, each group has its own baseline: attention ablation uses both attention types enabled and guidance disabled; guidance ablation uses attention and full guidance enabled; AIRL discriminator ablation compares with and without discriminator reward guidance. The values below indicate percentage degradation relative to each group baseline.",
+      "同时去除地图与社会交互注意力，离路风险显著增加。": "Removing both map and social-interaction attention significantly increases off-road risk.",
+      "去除智能体引导后，碰撞车辆占比退化最明显。": "Removing agent guidance causes the largest degradation in collision vehicle ratio.",
+      "去除 AIRL 判别器引导后，Singapore 场景 FDE 退化。": "Removing AIRL discriminator guidance degrades FDE in Singapore scenes.",
+      "注意力模块消融": "Attention Module Ablation",
+      "验证地图注意力和社会交互注意力对道路语义与多车交互条件表达的贡献。基线为开启两类注意力、关闭采样引导。": "Validates the contribution of map attention and social-interaction attention to road-semantics and multi-agent condition expression. The baseline enables both attention types and disables sampling guidance.",
+      "条件表达": "Condition Expression",
+      "配置": "Configuration",
+      "碰撞": "Collision",
+      "离路": "Off-road",
+      "w/o 地图注意力": "w/o Map Attention",
+      "w/o 社会交互注意力": "w/o Social Attention",
+      "w/o 两类注意力": "w/o Both Attention Types",
+      "采样引导模块消融": "Sampling Guidance Ablation",
+      "验证地图引导与智能体交互引导对采样阶段安全修正的作用。基线为开启注意力和完整引导。": "Validates the effects of map guidance and agent-interaction guidance on safety correction during sampling. The baseline enables attention and full guidance.",
+      "生成约束": "Generation Constraint",
+      "w/o 地图引导": "w/o Map Guidance",
+      "w/o 智能体引导": "w/o Agent Guidance",
+      "w/o 两类引导": "w/o Both Guidance Types",
+      "AIRL 判别器消融": "AIRL Discriminator Ablation",
+      "验证判别器奖励引导对行为相似性的贡献。比较有无判别器引导，指标覆盖运动学分布、空间误差和轨迹形态差异。": "Validates the contribution of discriminator reward guidance to behavioral similarity. The comparison covers kinematic distributions, spatial errors, and trajectory-shape differences.",
+      "行为偏好": "Behavior Preference",
+      "场景": "Scenario",
+      "Singapore · w/o 判别器引导": "Singapore · w/o Discriminator Guidance",
+      "Boston · w/o 判别器引导": "Boston · w/o Discriminator Guidance",
+      "01 · 安全性": "01 · Safety",
+      "在碰撞风险上取得最优结果": "Best Performance on Collision Risk",
+      "所提方法减少发生碰撞的车辆数量，并显著降低碰撞事件发生频率，体现了对多车交互安全性的建模能力。": "The proposed method reduces the number of vehicles involved in collisions and significantly lowers collision event frequency, reflecting its ability to model multi-agent interaction safety.",
+      "02 · 真实性": "02 · Realism",
+      "运动学分布更接近真实轨迹": "Kinematic Distributions Are Closer to Real Trajectories",
+      "速度均值与真实轨迹接近，加速度和加加速度分布更集中，抑制了部分生成方法中的动态突变。": "Mean speed is close to real trajectories, while acceleration and jerk distributions are more concentrated, suppressing dynamic jumps seen in some generative methods.",
+      "03 · 泛化性": "03 · Generalization",
+      "奖励引导具备跨城市潜力": "Reward Guidance Shows Cross-City Potential",
+      "AIRL 判别器主要在 Singapore 训练，但在 Boston 场景仍保持一定泛化效果，后续可扩展到更多道路拓扑与交通密度。": "Although the AIRL discriminator is mainly trained in Singapore, it maintains a degree of generalization in Boston scenes and can be extended to more road topologies and traffic densities."
+    };
+
+    const textNodes = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (node.parentElement.closest("script, style")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      textNodes.push({ node, zh: node.nodeValue.trim() });
+    }
+
+    const setLanguage = (lang) => {
+      document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
+      document.title = lang === "en" ? translations[document.title] || document.title : textNodes.find((item) => item.zh === "面向自动驾驶仿真测试的对抗式偏好引导多源注意力条件流匹配轨迹生成方法")?.zh || document.title;
+      textNodes.forEach((item) => {
+        item.node.nodeValue = lang === "en" ? (translations[item.zh] || item.zh) : item.zh;
+      });
+      langToggle.textContent = lang === "en" ? "中" : "EN";
+      langToggle.setAttribute("aria-label", lang === "en" ? "切换到中文" : "Switch to English");
+      localStorage.setItem("showcase-lang", lang);
+    };
 
     const updateChrome = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -1811,8 +2013,14 @@
       observer.observe(item);
     });
 
+    langToggle.addEventListener("click", () => {
+      const nextLang = document.documentElement.lang === "en" ? "zh-CN" : "en";
+      setLanguage(nextLang === "en" ? "en" : "zh");
+    });
+
     window.addEventListener("scroll", updateChrome, { passive: true });
     window.addEventListener("resize", updateChrome);
+    setLanguage(localStorage.getItem("showcase-lang") === "en" ? "en" : "zh");
     updateChrome();
   </script>
 </body>
