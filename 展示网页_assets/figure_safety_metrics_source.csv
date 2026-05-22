@@ -1,0 +1,9 @@
+﻿method,region,num_scenes,collision,off_road,rss_lon,rss_lat,source
+BC,Singapore,73,0.020367075846527898,0.17246672434021346,14.191780821917808,132.08219178082192,E:\CTGtest\result\paper_result\bc\singapore\precise_diagnostics\precise_diagnostics_summary.json
+BC,Boston,77,0.06731592714762633,0.09486197459335619,73.31168831168831,370.0779220779221,E:\CTGtest\result\paper_result\bc\boston\precise_diagnostics\precise_diagnostics_summary.json
+STRIVE,Singapore,73,0.11884535466324345,0.3391149029142583,35.61643835616438,150.94520547945206,E:\CTGtest\result\paper_result\strive\singapore\precise_diagnostics_summary.json
+STRIVE,Boston,77,0.14139053180433037,0.20092835373261905,123.02597402597402,429.46753246753246,E:\CTGtest\result\paper_result\strive\boston\precise_diagnostics_summary.json
+CTG,Singapore,72,0.02172819464486131,0.12239909010742345,14.5,127.44444444444444,E:\CTGtest\result\paper_result\diffusion\singapore\precise_diagnostics\precise_diagnostics_summary.json
+CTG,Boston,76,0.024859149045574392,0.04680024109774764,65.14473684210526,334.7368421052632,E:\CTGtest\result\paper_result\diffusion\boston\precise_diagnostics\precise_diagnostics_summary.json
+Ours,Singapore,73,0.015308663938800926,0.1370065626914942,14.835616438356164,114.98630136986301,E:\CTGtest\result\paper_result\ours\singapore\precise_diagnostics\precise_diagnostics_summary.json
+Ours,Boston,77,0.012082910589203057,0.04786978412434293,56.98701298701299,304.5974025974026,E:\CTGtest\result\paper_result\ours\boston\precise_diagnostics\precise_diagnostics_summary.json
