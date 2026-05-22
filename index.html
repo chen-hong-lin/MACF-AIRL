@@ -1460,7 +1460,7 @@
           </div>
         </div>
           <figure class="visual-frame reveal">
-            <img src="展示网页_assets/framework_v2.png" alt="多源注意力条件流匹配与 AIRL 引导框架">
+            <img class="language-image" src="展示网页_assets/framework_v2.png" data-zh-src="展示网页_assets/framework_v2.png" data-en-src="展示网页_assets/framework_en.png" alt="多源注意力条件流匹配与 AIRL 引导框架">
             <figcaption class="caption"><span>图 1 · 多源注意力条件流匹配与 AIRL 引导的车辆轨迹生成总体框架</span><span>Condition Encoding · Flow Matching · AIRL Guidance</span></figcaption>
           </figure>
           <div class="flow" aria-label="方法流程">
@@ -1977,6 +1977,9 @@
       document.title = lang === "en" ? translations[document.title] || document.title : textNodes.find((item) => item.zh === "面向自动驾驶仿真测试的对抗式偏好引导多源注意力条件流匹配轨迹生成方法")?.zh || document.title;
       textNodes.forEach((item) => {
         item.node.nodeValue = lang === "en" ? (translations[item.zh] || item.zh) : item.zh;
+      });
+      document.querySelectorAll(".language-image").forEach((image) => {
+        image.src = lang === "en" ? image.dataset.enSrc : image.dataset.zhSrc;
       });
       langToggle.textContent = lang === "en" ? "中" : "EN";
       langToggle.setAttribute("aria-label", lang === "en" ? "切换到中文" : "Switch to English");
