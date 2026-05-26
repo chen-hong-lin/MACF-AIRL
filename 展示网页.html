@@ -1704,6 +1704,39 @@
               </article>
             </div>
           </article>
+
+          <article class="video-scene reveal">
+            <div class="video-brief">
+              <div>
+                <h3>FM-AIRL 低风险复杂场景补充可视化</h3>
+                <p>从 FM_net_attention_AIRL_50_no_logprob 的逐场景评价中筛选碰撞率接近 0、越界率接近 0 且交通参与者较多的新增场景。补充样本不重复前文已展示的 Boston 0909 与 Singapore 0794，车辆数为 32-40，适合展示方法在复杂交通流中的稳定生成效果。</p>
+                <div class="scene-badges">
+                  <span class="scene-badge">Singapore 0795 <strong>40 agents</strong></span>
+                  <span class="scene-badge">Boston 0911 <strong>34 agents</strong></span>
+                  <span class="scene-badge">Boston 0781 <strong>32 agents</strong></span>
+                  <span class="scene-badge">Boston 0637 <strong>32 agents</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="video-grid">
+              <article class="video-card">
+                <video src="展示网页_assets/videos/fm-airl-singapore-0795.mp4" controls muted loop playsinline preload="metadata"></video>
+                <div><b>Singapore scene-0795</b><span>40 agents · 0 collision · 1.0% offroad</span></div>
+              </article>
+              <article class="video-card">
+                <video src="展示网页_assets/videos/fm-airl-boston-0911.mp4" controls muted loop playsinline preload="metadata"></video>
+                <div><b>Boston scene-0911</b><span>34 agents · 0 collision · 0 offroad</span></div>
+              </article>
+              <article class="video-card">
+                <video src="展示网页_assets/videos/fm-airl-boston-0781.mp4" controls muted loop playsinline preload="metadata"></video>
+                <div><b>Boston scene-0781</b><span>32 agents · 0 collision · 0 offroad</span></div>
+              </article>
+              <article class="video-card">
+                <video src="展示网页_assets/videos/fm-airl-boston-0637.mp4" controls muted loop playsinline preload="metadata"></video>
+                <div><b>Boston scene-0637</b><span>32 agents · 0 collision · 0 offroad</span></div>
+              </article>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -1919,6 +1952,8 @@
       "基于场景级评价筛选典型样本，直观呈现不同方法的轨迹差异": "Typical Samples Selected by Scene-Level Evaluation Reveal Method Differences",
       "该场景包含 13 个交通参与者。Ours 在离路、碰撞车辆占比和碰撞事件密度上均为 0；CTG 与 BC 的碰撞车辆占比均为 15.38%，STRIVE 为 30.77%，适合展示复杂交互下的安全优势。": "This scene contains 13 traffic participants. Ours has zero off-road behavior, zero collision vehicle ratio, and zero collision event density. CTG and BC both have a collision vehicle ratio of 15.38%, while STRIVE reaches 30.77%, making this scene suitable for showing safety advantages under complex interactions.",
       "该场景包含 35 个交通参与者。Ours 保持离路与碰撞指标为 0；CTG 的碰撞车辆占比为 11.43%，STRIVE 为 48.57%。BC 在该场景无碰撞但存在 17.14% 离路车辆占比，可作为基础行为克隆的参考对照。": "This scene contains 35 traffic participants. Ours keeps both off-road and collision metrics at zero. CTG has an 11.43% collision vehicle ratio and STRIVE reaches 48.57%. BC has no collision in this scene but shows a 17.14% off-road ratio, serving as a behavior-cloning reference.",
+      "FM-AIRL 低风险复杂场景补充可视化": "Additional FM-AIRL Visualizations for Low-Risk Complex Scenes",
+      "从 FM_net_attention_AIRL_50_no_logprob 的逐场景评价中筛选碰撞率接近 0、越界率接近 0 且交通参与者较多的新增场景。补充样本不重复前文已展示的 Boston 0909 与 Singapore 0794，车辆数为 32-40，适合展示方法在复杂交通流中的稳定生成效果。": "Additional scenes are selected from the scene-level evaluation of FM_net_attention_AIRL_50_no_logprob, prioritizing near-zero collision rate, near-zero off-road rate, and high traffic complexity. These samples do not repeat the previously shown Boston 0909 and Singapore 0794 scenes; they contain 32-40 agents and demonstrate stable generation in complex traffic flows.",
       "论文结论": "Conclusion",
       "真实驾驶行为分布刻画生成轨迹在仿真测试中的可用性基础": "Real Driving Behavior Distributions Establish the Usability Basis for Generated Trajectories in Simulation Testing",
       "消融实验": "Ablation Study",
